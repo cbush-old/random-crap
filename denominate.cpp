@@ -1,3 +1,6 @@
+// Convert cash amount to change coin denominations *Canadian version*
+// Command line input: ./denominate [0-9]*[.][0-9]{2}
+
 #include <iostream>
 #include <sstream>
 #include <cctype>
@@ -8,28 +11,9 @@ using std::vector;
 using std::string;
 using std::stringstream;
 
-unsigned int denom(unsigned int* change, unsigned int penny_value){  
-  return (*change-(*change%=penny_value))/penny_value;  
-}
-
-string pluralize(unsigned int a, string word){
-  stringstream ss;
-  ss << a << " " << word;
-  string plural;
-  if(ss.str()[ss.str().length()-1]=='y') plural = ss.str().substr(0, ss.str().length()-1)+"ies"; else plural = ss.str()+'s';
-  return (a==1?ss.str():plural);
-  
-}
-template<class T> string serialize(vector<T> v){
-  if(!v.size()) return "nothing";
-  stringstream ss;
-  for(int i=0; i<v.size(); i++) 
-    if(v.size()>1&&i==v.size()-1) ss << " and " << v[i];
-    else if(i)                    ss << ", " << v[i]; 
-    else                          ss << v[i];
-    
-  return ss.str();
-}
+unsigned int denom(unsigned int*, unsigned int);
+string pluralize(unsigned int, string);
+template<class T> string serialize(vector<T>);
 
 int main(int argc, char* argv[] ){
 
@@ -40,18 +24,24 @@ int main(int argc, char* argv[] ){
   
   unsigned int change = 0;
   char dot = 0, error = 0;
+  
   for(int i=0, c=argv[1][0]; c!='\0'; c=argv[1][++i]){
     if(dot) if(++dot > 3) error = 1;
     if(isdigit(c)) change = change*10+c-'0';
     else if(!dot&&c=='.') dot = 1;
     else error = 1;
   }
+  
   if(error){ 
     cout << "Invalid input.\n"; 
     return 1; 
   }
-  if(dot < 2) change *= 100;
-  else if(dot==2) change *= 10;
+  
+  if(dot < 2) 
+    change *= 100;
+  else if(dot==2) 
+    change *= 10;
+  
   
   unsigned int bill100, bill50, bill20, bill10, bill5, toonie, dollar, quarter, nickel, dime, penny;
   
@@ -86,4 +76,29 @@ int main(int argc, char* argv[] ){
   received.clear();
   return 0;
 
+}
+
+unsigned int denom(unsigned int* change, unsigned int penny_value){  
+  return (*change-(*change%=penny_value))/penny_value;  
+}
+
+string pluralize(unsigned int a, string word){
+  stringstream ss;
+  ss << a << " " << word;
+  string plural;
+  if(ss.str()[ss.str().length()-1]=='y') plural = ss.str().substr(0, ss.str().length()-1)+"ies"; else plural = ss.str()+'s';
+  return (a==1?ss.str():plural);
+  
+}
+
+template<class T> string serialize(vector<T> v){
+  if(!v.size()) return "nothing";
+  stringstream ss;
+  for(int i=0; i<v.size(); i++) 
+    if(v.size()>1&&i==v.size()-1) ss << " and " << v[i];
+    else if(i)                    ss << ", " << v[i]; 
+    else                          ss << v[i];
+    
+  return ss.str();
+  
 }
