@@ -5,6 +5,8 @@ formerly misc-cpp
 Experiments, exercises, homework, other people's homework, scraps, etc.
 
 
+License
+=======
 
 Everything in this repository
 is free software: you can redistribute it and/or modify
