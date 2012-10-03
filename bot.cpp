@@ -29,7 +29,8 @@ int main(int argc, char* argv[]){
     << "#include <iostream>\n"
     << "#include <sstream>\n"
     << "#include <string>\n"
-    << "#include <cctype>\n\n"
+    << "#include <vector>\n"
+    << "#include <cctype>\n"
     << "#include <cstdlib>\n\n"
     << "using namespace std;\n\n"
     << "int main(){\n\n";
